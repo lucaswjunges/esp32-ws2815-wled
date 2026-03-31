@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "author": "ESP32 + WS2812B WLED Design",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-esp32-devkit-v1",
+      "id": "esp1",
+      "top": 10,
+      "left": 20,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel-strip",
+      "id": "leds1",
+      "top": 250,
+      "left": -60,
+      "attrs": {
+        "pixels": "30",
+        "direction": "horizontal"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": 150,
+      "left": 200,
+      "attrs": { "value": "330" },
+      "rotate": 90
+    },
+    {
+      "type": "wokwi-esp32-devkit-v1",
+      "id": "esp2",
+      "top": 10,
+      "left": 560,
+      "left": 560,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel-strip",
+      "id": "leds2",
+      "top": 250,
+      "left": 480,
+      "attrs": {
+        "pixels": "30",
+        "direction": "horizontal"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r2",
+      "top": 150,
+      "left": 740,
+      "attrs": { "value": "330" },
+      "rotate": 90
+    }
+  ],
+  "connections": [
+    ["esp1:GND.1",  "leds1:GND", "black",  ["v40", "h-120"]],
+    ["esp1:5V",     "leds1:VCC", "red",    ["v50", "h-140"]],
+    ["esp1:D4",     "r1:1",      "green",  ["h20"]],
+    ["r1:2",        "leds1:DIN", "green",  ["v90", "h-200"]],
+
+    ["esp2:GND.1",  "leds2:GND", "black",  ["v40", "h-120"]],
+    ["esp2:5V",     "leds2:VCC", "red",    ["v50", "h-140"]],
+    ["esp2:D4",     "r2:1",      "green",  ["h20"]],
+    ["r2:2",        "leds2:DIN", "green",  ["v90", "h-200"]]
+  ],
+  "dependencies": {}
+}

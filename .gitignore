@@ -1,0 +1,30 @@
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+
+# Old / superseded simulation files
+led_power_sim_ngspice.sp
+led_power_sim_gui.sp
+led_power_sim_export.sp
+led_power_sim_raw.sp
+open_falstad.py
+sim_output.raw
+"sim_data.txt"
+
+# Old PDF (wrong component)
+BOM_Quote_ESP32_WS2812B.pdf
+
+# LaTeX source (PDF already included)
+BOM_Quote.tex
+
+# Python cache
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
