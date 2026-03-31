@@ -18,8 +18,6 @@ sim_output.raw
 # Old PDF (wrong component)
 BOM_Quote_ESP32_WS2812B.pdf
 
-# LaTeX source (PDF already included)
-BOM_Quote.tex
 
 # Python cache
 __pycache__/

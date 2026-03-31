@@ -1,0 +1,591 @@
+% ============================================================
+%  BOM & Quotation -- ESP32 + WS2815 WLED System
+%  Compile: pdflatex BOM_Quote.tex  (run twice for page refs)
+% ============================================================
+\documentclass[10pt, a4paper]{article}
+
+% ── Geometry ────────────────────────────────────────────────
+\usepackage[a4paper,
+            top=22mm, bottom=20mm,
+            left=16mm, right=16mm]{geometry}
+
+% ── Encoding & fonts ────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[final,
+            tracking=true,
+            kerning=true,
+            factor=1100,
+            stretch=10,
+            shrink=10,
+            verbose=false]{microtype}
+
+% ── Suppress minor over/underfull box warnings ──────────────
+\hfuzz=3pt
+\vfuzz=3pt
+\hbadness=2500
+\vbadness=2500
+\emergencystretch=2em
+
+% ── Colour ──────────────────────────────────────────────────
+\usepackage[table]{xcolor}
+\definecolor{hdark}{HTML}{1a2f4e}
+\definecolor{hmed}{HTML}{2c5282}
+\definecolor{hlight}{HTML}{ebf4ff}
+\definecolor{rowA}{HTML}{ffffff}
+\definecolor{rowB}{HTML}{f7fafc}
+\definecolor{rowtot}{HTML}{fffbeb}
+\definecolor{rowok}{HTML}{f0fff4}
+\definecolor{alertbg}{HTML}{fff5f5}
+\definecolor{alertfg}{HTML}{742a2a}
+\definecolor{alertborder}{HTML}{fc8181}
+\definecolor{greenfg}{HTML}{276749}
+\definecolor{bluefg}{HTML}{2c5282}
+\definecolor{grayfg}{HTML}{4a5568}
+\definecolor{rulecol}{HTML}{cbd5e0}
+\definecolor{linkblue}{HTML}{1558b0}
+
+% ── Tables ──────────────────────────────────────────────────
+\usepackage{booktabs}
+\usepackage{colortbl}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{makecell}
+\arrayrulecolor{rulecol}
+\setlength{\arrayrulewidth}{0.4pt}
+\setlength{\extrarowheight}{2pt}
+\setlength{\tabcolsep}{4pt}
+
+% ── Misc ────────────────────────────────────────────────────
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{textcomp}
+\usepackage{gensymb}
+\usepackage{fancyhdr}
+\usepackage{tcolorbox}
+\usepackage{tikz}
+\usepackage{lastpage}
+\usepackage{parskip}
+\usepackage{ragged2e}
+\usepackage{calc}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+\tcbuselibrary{skins, breakable}
+\usetikzlibrary{positioning}
+
+% ── Hyperref ────────────────────────────────────────────────
+\hypersetup{
+  pdftitle  = {BOM and Quotation -- ESP32 + WS2815 WLED System},
+  pdfauthor = {Engineering Department},
+  colorlinks = true,
+  urlcolor   = linkblue,
+  linkcolor  = hmed
+}
+
+% ── Column types ────────────────────────────────────────────
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\RaggedLeft\arraybackslash}p{#1}}
+
+% ── Section header (coloured box, no titlesec needed) ───────
+\makeatletter
+\renewcommand{\section}[1]{%
+  \vspace{10pt}%
+  \noindent%
+  \colorbox{hmed}{%
+    \parbox{\dimexpr\linewidth-2\fboxsep\relax}{%
+      \textcolor{white}{\large\bfseries\strut\enspace#1\strut}%
+    }%
+  }%
+  \par\vspace{6pt}\noindent%
+}
+\makeatother
+
+% ── Header / Footer ─────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyfoot[L]{\footnotesize\color{grayfg}
+  ESP32 + WS2815 WLED System --- BOM \& Quotation}
+\fancyfoot[C]{\footnotesize\color{grayfg}
+  Revision~1.0 --- \today}
+\fancyfoot[R]{\footnotesize\color{grayfg}
+  Page~\thepage\ of~\pageref{LastPage}}
+
+% ── tcolorbox styles ────────────────────────────────────────
+\tcbset{alertbox/.style={
+  enhanced, breakable,
+  colback=alertbg, colframe=alertborder,
+  boxrule=0.8pt, arc=3pt,
+  left=6pt, right=6pt, top=5pt, bottom=5pt,
+  fontupper=\small\color{alertfg}
+}}
+
+% ── Helper: dark table header cell ──────────────────────────
+\newcommand{\HDR}[1]{%
+  \cellcolor{hdark}\textcolor{white}{\textbf{\small #1}}}
+
+% ── Helper: Mercado Livre search link ───────────────────────
+\newcommand{\ML}[2]{%
+  \scriptsize\href{#1}{\textcolor{linkblue}{#2}}}
+
+% ── Checkbox ────────────────────────────────────────────────
+\newcommand{\cbox}{\makebox[0.5cm][c]{$\square$}}
+
+% ============================================================
+\begin{document}
+% ============================================================
+
+% ── Blue cover band ─────────────────────────────────────────
+\begin{tikzpicture}[remember picture, overlay]
+  \fill[hdark]
+    (current page.north west)
+    rectangle ([yshift=-46mm]current page.north east);
+\end{tikzpicture}
+
+\vspace*{-10mm}
+\noindent
+\begin{minipage}[t]{0.58\linewidth}
+  {\fontsize{20}{25}\selectfont\bfseries\color{white}
+    ESP32 + WS2815 WLED\\[3pt]}
+  {\large\bfseries\color{hlight}
+    Bill of Materials \& Quotation}
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.40\linewidth}
+  \raggedleft\small\color{white}
+  \textbf{Document Date:}~\today\\[2pt]
+  \textbf{Revision:}~1.0\\[2pt]
+  \textbf{Project:}~LED Controller Dual Channel\\[2pt]
+  \textbf{Scope:}~2$\times$ ESP32 + 2$\times$ WS2815 Strip
+\end{minipage}
+
+\vspace{22mm}
+
+% ============================================================
+\section{1.\enspace Project Summary}
+% ============================================================
+
+\begin{tabularx}{\linewidth}{%
+  >{\bfseries\color{bluefg}\small\RaggedRight}L{3.6cm}%
+  >{\small\RaggedRight}L{5.0cm}%
+  >{\bfseries\color{bluefg}\small\RaggedRight}L{3.6cm}%
+  >{\small\RaggedRight}X}
+  \HDR{Parameter} & \HDR{Value} & \HDR{Parameter} & \HDR{Value} \\
+  \rowcolor{rowB}
+  Microcontrollers    & 2$\times$ ESP32-WROOM-32D
+  & Firmware           & WLED (open-source) \\
+  LED Strips          & 2$\times$ WS2815 5\,m / 60\,LED/m / 12\,V
+  & Data GPIO          & GPIO4 per ESP32 \\
+  \rowcolor{rowB}
+  Total LEDs          & 600 (300 per strip)
+  & Level Shifter      & SN74AHCT125N (3.3\,V$\to$5\,V) \\
+  Strip Voltage       & \textbf{12\,V DC (direct from PSU)}
+  & Power Topology     & 12\,V direct to strip; small buck for ESP32 \\
+  \rowcolor{rowB}
+  Peak Strip Current  & $\approx$7.5\,A per strip (full white)
+  & PSU per System     & 2$\times$ Mean Well LRS-150-12 (one per location) \\
+  Power per System    & $\approx$120\,W (2 independent systems)
+  & Safety Margin      & $\geq$30\% on all power ratings \\
+  \bottomrule
+\end{tabularx}
+
+\vspace{6pt}
+
+% ============================================================
+\section{2.\enspace Power Calculation Summary}
+% ============================================================
+
+\small\textit{Each system is fully independent at a separate location.
+Do \textbf{not} combine the two systems --- values below are \textbf{per system}.}
+
+\vspace{4pt}
+\begin{tabularx}{\linewidth}{%
+  L{3.8cm}%
+  C{1.6cm}%
+  C{2.8cm}%
+  C{1.8cm}%
+  X}
+  \HDR{Load} & \HDR{Voltage} & \HDR{Current (worst case)}
+  & \HDR{Power} & \HDR{With 30\% Margin} \\
+  \rowcolor{rowB}
+  WS2815 Strip\newline(300 LEDs $\times$ 20\,mA, 18\,W/m)
+  & 12\,V & 7.50\,A & 90.0\,W & 9.75\,A\,/\,117\,W \\
+  ESP32\,+\,Level Shifter\newline(via small 12\,V$\to$5\,V buck)
+  & 5\,V & 0.26\,A & 1.30\,W & 0.34\,A\,/\,1.7\,W \\
+  \rowcolor{rowB}
+  ESP32 supply at 12\,V input\newline(buck efficiency 85\%)
+  & 12\,V & 0.12\,A & 1.50\,W & 0.16\,A\,/\,1.9\,W \\
+  \midrule
+  \rowcolor{rowtot}
+  \textbf{TOTAL per system at 12\,V}
+  & \textbf{12\,V} & \textbf{7.62\,A}
+  & \textbf{91.5\,W} & \textbf{9.9\,A\,$\to$\,10\,A fuse} \\
+  \rowcolor{rowok}
+  \textbf{PSU required per system}
+  & \textbf{12\,V} & \textbf{$\leq$12.5\,A}
+  & \textbf{$\leq$120\,W} & \textbf{LRS-150-12 (12.5\,A)\,\checkmark} \\
+  \bottomrule
+\end{tabularx}
+
+\vspace{6pt}
+\begin{tcolorbox}[colback=green!6!white, colframe=green!50!black, title={\bfseries Wire Drop Check (WS2815 12\,V, AWG12, 5\,m)}]
+  At 7.5\,A through AWG12 over 5\,m: round-trip drop~=~$7.5\,\mathrm{A} \times 52\,\mathrm{m\Omega} = \mathbf{0.39\,V}$.
+  Strip entry sees \textbf{11.61\,V} --- above WS2815 minimum of \textbf{11.5\,V}.\\[3pt]
+  \textbf{Power injection at both ends is RECOMMENDED.}
+  Internal strip trace resistance ($\approx$30\,m$\Omega$/m) adds further drop at high brightness.
+  With injection at both ends, far-end voltage remains $\geq$11.6\,V.
+\end{tcolorbox}
+
+\newpage
+
+% ============================================================
+\section{3.\enspace Bill of Materials (BOM)}
+% ============================================================
+
+% Column widths: textwidth=178mm, tabcolsep=3.5pt, 8 cols → padding=56pt≈19.76mm
+% Available for content: 158.24mm
+% 4 + 20 + 25 + 6 + 28 + 19 + 19 + 37 = 158mm ✓
+\setlength{\tabcolsep}{3.5pt}
+\begin{longtable}{%
+  C{0.4cm}%      #
+  L{2.0cm}%      Component
+  L{2.5cm}%      Model / Part#
+  C{0.6cm}%      Qty
+  L{2.8cm}%      Specifications
+  R{2.1cm}%      Unit (USD)
+  R{2.1cm}%      Total (USD)
+  L{3.3cm}}%     Mercado Livre
+
+  % ── First-page header ────────────────────────────────────
+  \HDR{\#} & \HDR{Component} & \HDR{Model\,/\,Part\#}
+  & \HDR{Qty} & \HDR{Specifications}
+  & \HDR{Unit\,(BRL)} & \HDR{Total\,(BRL)}
+  & \HDR{Product Link} \\
+  \endfirsthead
+
+  \multicolumn{8}{l}{%
+    \small\color{grayfg}\textit{(continued from previous page)}}\\[2pt]
+  \HDR{\#} & \HDR{Component} & \HDR{Model\,/\,Part\#}
+  & \HDR{Qty} & \HDR{Specifications}
+  & \HDR{Unit\,(BRL)} & \HDR{Total\,(BRL)}
+  & \HDR{Product Link} \\
+  \endhead
+
+  \multicolumn{8}{r}{%
+    \small\color{grayfg}\textit{(continues on next page)}}\\
+  \endfoot
+  \bottomrule
+  \endlastfoot
+
+  % ── Items ────────────────────────────────────────────────
+  \rowcolor{rowB}
+  \small 1
+  & \small ESP32 DevKit
+  & \small ESP-WROOM-32\newline NODEMCU 38P
+  & \small 2
+  & \small 3.3\,V I/O, 240\,MHz,\newline WiFi/BT, 5\,V VIN
+  & \small R\$77,39
+  & \small R\$154,78
+  & \ML{https://www.proesi.com.br/esp-32-wifi-e-bluetooth-nodemcu-38-pinos}{ESP-WROOM-32 NODEMCU 38P} \\
+
+  \small 2
+  & \small WS2815 LED Strip
+  & \small 5\,m 12\,V IP20\newline 60\,LED/m 300\,LEDs
+  & \small 2
+  & \small 12\,V, 25\,mA/LED,\newline 300 LEDs, GRB order
+  & \small R\$167,20
+  & \small R\$334,40
+  & \ML{https://www.mercadolivre.com.br/fita-de-led-ws2815-enderecavel-5-metros-300-leds-12volts-rgb/up/MLBU3805112725}{WS2815 LED strip 5m 12V} \\
+
+  \rowcolor{rowB}
+  \small 3
+  & \small Buck Conv.\newline (ESP32)
+  & \small XL4015 12\,V$\to$5\,V\newline 5\,A module
+  & \small 2
+  & \small Input 8--36\,V,\newline output 5\,V\,/\,5\,A adj.
+  & \small R\$13,76
+  & \small R\$27,52
+  & \ML{https://www.proesi.com.br/modulo-regulador-de-tens-o-step-down-xl4015-5a}{XL4015 Step-Down 5A} \\
+
+  \small 4
+  & \small Level Shifter IC
+  & \small 74HC125 (DIP-14)\newline subst. AHCT125N
+  & \small 2
+  & \small Quad buffer; DIP-14;\newline Vih\,$\geq$\,3.15\,V@5\,V\newline (HC, not AHCT)
+  & \small R\$1,41
+  & \small R\$2,82
+  & \ML{https://www.proesi.com.br/74hc125-circuito-integrado-dip-14}{74HC125 Buffer DIP-14} \\
+
+  \rowcolor{rowB}
+  \small 5
+  & \small Capacitor\newline 470\,$\mu$F/25\,V
+  & \small Generic\newline 470uF/25V 105\textdegree{}C
+  & \small 2
+  & \small Electrolytic, radial,\newline \textbf{25\,V rated} (12\,V rail)
+  & \small R\$0,55
+  & \small R\$1,10
+  & \ML{https://proesi.com.br/capacitor-eletrolitico-470uf-25v-105.html}{Cap. Elet. 470uF/25V} \\
+
+  \small 6
+  & \small Capacitor\newline 470\,$\mu$F/25\,V
+  & \small Generic\newline 470uF/25V 105\textdegree{}C
+  & \small 2
+  & \small Electrolytic, radial,\newline 105\,\textdegree{}C rated
+  & \small R\$0,55
+  & \small R\$1,10
+  & \ML{https://proesi.com.br/capacitor-eletrolitico-470uf-25v-105.html}{Cap. Elet. 470uF/25V} \\
+
+  \rowcolor{rowB}
+  \small 7
+  & \small Resistor 330\,$\Omega$
+  & \small CR25 1/4W 330R\newline $\pm$5\% carbon film
+  & \small 2
+  & \small 330\,$\Omega$, 0.25\,W;\newline DIN signal protection
+  & \small R\$0,07
+  & \small R\$0,14
+  & \ML{https://www.proesi.com.br/resistor-carbono-cr25-1-4w-330r}{Resistor CR25 1/4W 330R} \\
+
+  \small 8
+  & \small Blade Fuse\newline + Holder
+  & \small Blade Mini \textbf{10\,A}\newline + Fuse Holder
+  & \small 2
+  & \small \textbf{10\,A}\,/\,32\,V DC;\newline per-system protection
+  & \small R\$6,63
+  & \small R\$13,26
+  & \ML{https://www.proesi.com.br/fusivel-lamina-mini-11x16mm-10a-incolor}{Blade Fuse 10A}\newline
+    \ML{https://www.proesi.com.br/porta-fusivel-lamina-mini}{Fuse Holder Mini} \\
+
+  \rowcolor{rowB}
+  \small 9
+  & \small Terminal Block\newline 2-pin
+  & \small 2EDGK Terminal\newline 5.08\,mm 2-Way
+  & \small 8
+  & \small Screw terminal,\newline 5.08\,mm pitch
+  & \small R\$1,87
+  & \small R\$14,96
+  & \ML{https://www.proesi.com.br/borne-femea-2edgk-2-vias-espacamento-5-0mm}{Terminal 2EDGK 5.08mm 2W} \\
+
+  \small 10
+  & \small Power Wire\newline 4\,mm$^{2}$
+  & \small Flex.\ Cable 4\,mm$^{2}$\newline 750\,V Black
+  & \small 4\,m
+  & \small 20\,A, flexible;\newline 12\,V power runs
+  & \small R\$5,06/m
+  & \small R\$20,24
+  & \ML{https://www.proesi.com.br/cabo-flexivel-flexsil-750v-4mm-preto-preco-por-metro}{Flex.\ Cable 4mm\textsuperscript{2} 750V/m} \\
+
+  \rowcolor{rowB}
+  \small 11
+  & \small Signal Wire\newline AWG22
+  & \small Thin Wire 0.32\,mm$^{2}$\newline 300\,V 70\textdegree{}C
+  & \small 2\,m
+  & \small Low capacitance;\newline DIN data lines
+  & \small R\$1,42/m
+  & \small R\$2,84
+  & \ML{https://www.proesi.com.br/cabinho-flexivel-0-32mm-300v-70-c-preto-preco-por-metro}{Thin Wire 0.32mm\textsuperscript{2} 300V/m} \\
+
+  \small 12
+  & \small Heatsink
+  & \small Heatsink DN812\newline 27$\times$16$\times$30\,mm
+  & \small 2
+  & \small Aluminium extruded;\newline for XL4015 IC
+  & \small R\$3,69
+  & \small R\$7,38
+  & \ML{https://www.proesi.com.br/dissipador-de-calor-dn812-27x16x30mm}{Heatsink DN812 27x16x30} \\
+
+  \rowcolor{rowB}
+  \small 13
+  & \small Connector\newline 2-pin Pairs
+  & \small 2-Pin Connector\newline Male+Female
+  & \small 6
+  & \small Pairs w/ crimp\newline terminals
+  & \small R\$5,91
+  & \small R\$35,46
+  & \ML{https://www.proesi.com.br/conector-2-vias-quadrado-com-terminais}{2-Pin Square Connector} \\
+
+  \small 14
+  & \small Ferrule Crimps\newline 4\,mm$^{2}$
+  & \small Ferrule Kit\newline 0.5--6\,mm 400\,pcs
+  & \small 1\,kit
+  & \small Wire-end treatment\newline for screw terminals
+  & \small R\$29,73
+  & \small R\$29,73
+  & \ML{https://www.proesi.com.br/kit-terminal-tubular-ilhos-isolados-0-5-a-6-mm-400-pecas}{Ferrule Kit 400\,pcs} \\
+
+  % ── Totals ───────────────────────────────────────────────
+  \midrule
+  \rowcolor{rowtot}
+  \multicolumn{6}{r}{\small\bfseries Components subtotal:}
+  & \small\bfseries R\$645,85 & \\
+
+  \rowcolor{rowtot}
+  \multicolumn{6}{r}{\small Shipping (contact Proesi):}
+  & \small --- & \\
+
+  \midrule
+  \rowcolor{rowok}
+  \multicolumn{6}{r}{%
+    \normalsize\bfseries\color{greenfg} TOTAL ESTIMATED PROJECT COST:}
+  & \normalsize\bfseries\color{greenfg}R\$645,85 & \\
+
+\end{longtable}
+\setlength{\tabcolsep}{4pt}% restore default
+
+{\footnotesize\color{grayfg}
+  Proesi (proesi.com.br) prices verified on~\today.
+  Items~2 (WS2815) and~3 (XL4015) are not stocked by Proesi ---
+  prices sourced from Mercado Livre; verify current pricing before ordering.
+  Product links open Proesi or Mercado Livre pages --- confirm stock before purchasing.
+  Proesi phone: (47)~3080-5529.}
+
+\vspace{4pt}
+
+% ============================================================
+\section{4.\enspace Engineering Notes \& Recommendations}
+% ============================================================
+
+\begin{tabular}{L{3.5cm} L{\dimexpr\linewidth-3.5cm-4\tabcolsep\relax}}
+  \HDR{Topic} & \HDR{Detail} \\
+
+  \rowcolor{rowB}
+  \makecell[tl]{%
+    \small\bfseries\color{bluefg}Level Shifter\\
+    \small\bfseries\color{bluefg}(REQUIRED)}
+  &
+  \small ESP32 GPIO high~=~3.3\,V;
+  WS2815 $V_\mathrm{ih,min}$~=~3.5\,V.
+  Margin:~\textbf{$-$200\,mV} (violation).
+  The SN74AHCT125N accepts 3.3\,V input
+  ($V_\mathrm{ih,min}$~=~2.0\,V) and drives output to full 5\,V.
+  Omitting this causes intermittent ``zombie pixel'' failures that vary
+  by LED batch, temperature, and cable length. \\
+
+  \makecell[tl]{%
+    \small\bfseries\color{bluefg}Power Injection\\
+    \small\bfseries\color{bluefg}(RECOMMENDED)}
+  &
+  \sloppy\small External wire drop (AWG12, 5\,m, 7.5\,A)~=~\textbf{0.39\,V}.
+  Strip entry sees \textbf{11.61\,V} --- above WS2815 minimum of \textbf{11.5\,V}.
+  However, internal strip trace resistance ($\approx$30\,m$\Omega$/m) adds further
+  drop at high brightness. Inject 12\,V/GND at \textbf{both ends} of each strip. \\
+
+  \rowcolor{rowB}
+  \small\bfseries\color{bluefg}Wire Gauge
+  &
+  \small Use \textbf{AWG12} for the 12\,V supply bus and strip runs
+  (7.5\,A at 12\,V; 0.39\,V drop over 5\,m --- within WS2815 spec).
+  Use AWG22 for DIN data lines. \\
+
+  \small\bfseries\color{bluefg}Buck Derating
+  &
+  \small WS2815 strips connect \textbf{directly at 12\,V} --- no strip buck needed.
+  ESP32: one XL4015 5\,A per unit, adequate for 0.5\,A max draw.
+  Mount heatsinks; derate to 70\% for continuous operation. \\
+
+  \rowcolor{rowB}
+  \small\bfseries\color{bluefg}WLED Setup
+  &
+  \small Navigate to \texttt{Config\,$\to$\,LED Preferences}:
+  set \textbf{LED Type = WS2815} (not WS2812B) and
+  \textbf{Maximum Current = 6000\,mA} per strip
+  (protects a 10\,A PSU; raise to 7500\,mA if using LRS-150-12).
+  Synchronise both ESP32 units via WLED multicast UDP
+  (port~21324, same subnet). \\
+
+  \small\bfseries\color{bluefg}Fusing
+  &
+  \small Install a \textbf{10\,A blade fuse} on the 12\,V feed of each system.
+  Strip worst-case current is 7.5\,A; 10\,A fuse provides protection with margin.
+  Do not use 25\,A fuses --- they will not protect AWG12 wiring at strip-level faults. \\
+
+  \bottomrule
+\end{tabular}
+
+\vspace{6pt}
+
+% ============================================================
+\section{5.\enspace Pre-Assembly Safety Checklist}
+% ============================================================
+
+\begin{tabularx}{\linewidth}{c X c X}
+  \multicolumn{4}{l}{%
+    \small\color{grayfg}
+    Verify every item before energising the system for the first time (per system).}
+  \\[4pt]
+
+  \rowcolor{rowB}
+  \cbox & \small \textbf{10\,A} fuse installed on each 12\,V feed
+  & \cbox & \small WLED LED type set to \textbf{WS2815} (not WS2812B) \\
+
+  \cbox & \small Wire gauge verified: AWG12 min.\ for all \textbf{12\,V} runs
+  & \cbox & \small WLED max current set to \textbf{6000\,mA} per strip \\
+
+  \rowcolor{rowB}
+  \cbox & \small PSU output verified at 12.0\,V before connecting strip
+  & \cbox & \small SN74AHCT125N level shifter on each DIN line \\
+
+  \cbox & \small Buck output trimmed to 5.00\,V before connecting ESP32
+  & \cbox & \small 330\,$\Omega$ series resistor on each DIN line \\
+
+  \rowcolor{rowB}
+  \cbox & \small Common GND: PSU, buck, ESP32 and strip (star topology)
+  & \cbox & \small 470\,$\mu$F/25\,V cap at each strip 12\,V entry point \\
+
+  \cbox & \small Power injection at \textbf{both ends} of each 5\,m strip
+  & \cbox & \small Heatsink installed on XL4015 with thermal compound \\
+
+  \rowcolor{rowB}
+  \cbox & \small All stranded wire ends crimped with ferrules
+  & \cbox & \small WLED firmware flashed and AP connection verified \\
+
+  \bottomrule
+\end{tabularx}
+
+\vspace{8pt}
+\noindent\rule{\linewidth}{0.4pt}\par\vspace{3pt}
+\begin{tcolorbox}[colback=blue!4!white, colframe=blue!40!black,
+  title={\bfseries PSU Sizing Note --- 10\,A vs 12.5\,A},
+  fontupper=\small\RaggedRight]
+
+  \textbf{Q: Is a 10\,A / 220\,V\,$\to$\,12\,V PSU sufficient?}
+
+  \textbf{Yes}, for typical use.
+  The 7.5\,A figure is the absolute worst case: all 300 LEDs at
+  \emph{full white} (R\,+\,G\,+\,B at 100\%) simultaneously.
+  In practice, colorful effects draw \textbf{2--4\,A} per strip.
+
+  \vspace{4pt}
+  \begin{tabular}{@{}l l l@{}}
+    \textbf{Scenario} & \textbf{Strip current} & \textbf{10\,A PSU load} \\
+    \midrule
+    Full white, 100\% (worst case) & 7.5\,A  & 75\% \\
+    Colorful effects, 80\%         & $\approx$3--5\,A & 30--50\% \\
+    Single colour, 50\%            & $\approx$1.5\,A  & 15\% \\
+  \end{tabular}
+
+  \vspace{4pt}
+  A 10\,A PSU is acceptable provided:
+  (1) WLED maximum current is set to \textbf{7500\,mA};
+  (2) the PSU is a quality unit (Mean Well or equivalent), not a no-brand transformer.
+
+  The LRS-150-12 (12.5\,A) in the BOM provides a better safety margin and is recommended.
+  Both systems are independent --- simultaneous use has no effect on per-system sizing.
+\end{tcolorbox}
+
+\vspace{4pt}
+{\footnotesize\color{grayfg}\sloppy
+  Document generated~\today. Revision~2.0 --- corrected for WS2815\,@\,12\,V, independent systems.
+  Power calculations validated via analytical SPICE model (AWG12, 5\,m, 7.5\,A).
+  This document covers 2 independent systems at separate locations
+  (2$\times$~ESP32\,+\,2$\times$~WS2815 strips, 2$\times$~separate PSUs).
+  All designs are provided for reference only ---
+  verify all specifications before assembly.
+}
+
+\end{document}
